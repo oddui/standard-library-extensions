@@ -1,0 +1,17 @@
+{
+  "name": "standard-library-extensions",
+  "version": "1.0.0",
+  "description": "JavaScript standard library extensions for building complex and scalable web applications.",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest --config jestconfig.json"
+  },
+  "author": "Ziyu",
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "@types/jest": "^26.0.0",
+    "jest": "^26.0.1",
+    "ts-jest": "^26.1.0",
+    "typescript": "^3.9.5"
+  }
+}
