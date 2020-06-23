@@ -50,6 +50,22 @@ export class TreeMap<K, V> implements Map<K, V> {
   }
 
   /**
+   * Returns the height of the BST (a 1-node tree has height 0). This method is mostly used for
+   * debugging and testing.
+   */
+  get height(): number {
+    return this._height(this.root);
+  }
+
+  /**
+   * Returns the black height of the red-black BST (a 1-node tree has height 0). This method is
+   * mostly used for debugging and testing.
+   */
+  get blackHeight(): number {
+    return this._blackHeight(this.root);
+  }
+
+  /**
    * Does this map contain the given key?
    * @param key
    */
@@ -78,6 +94,14 @@ export class TreeMap<K, V> implements Map<K, V> {
     this.root = this._set(this.root, key, value);
     this.root.color = Node.BLACK;
     return this;
+  }
+
+  deleteMin(key: K): boolean {
+    throw new Error('Method not implemented.');
+  }
+
+  deleteMax(key: K): boolean {
+    throw new Error('Method not implemented.');
   }
 
   delete(key: K): boolean {
@@ -176,6 +200,24 @@ export class TreeMap<K, V> implements Map<K, V> {
   private _size(x?: Node<K, V>): number {
     if (!x) return 0;
     return x.size;
+  }
+
+  private _height(x?: Node<K, V>): number {
+    if (!x) return -1;
+
+    return 1 + Math.max(
+      this._height(x.left),
+      this._height(x.right)
+    );
+  }
+
+  private _blackHeight(x?: Node<K, V>): number {
+    if (!x) return -1;
+
+    return (this.isRed(x) ? 0: 1) + Math.max(
+      this._blackHeight(x.left),
+      this._blackHeight(x.right)
+    );
   }
 
   private isRed(x?: Node<K, V>) {

@@ -1,9 +1,11 @@
 import TreeMap from './TreeMap';
 
 describe('TreeMap', () => {
-  it('interface', () => {
-    const map = new TreeMap<string, number>((a, b) => a.charCodeAt(0) - b.charCodeAt(0));
+  let map: TreeMap<string, number>;
 
+  beforeEach(() => map = new TreeMap<string, number>());
+
+  it('interface', () => {
     expect(map.min).toBeUndefined();
     expect(map.max).toBeUndefined();
 
@@ -22,6 +24,8 @@ describe('TreeMap', () => {
     map.set('E', 12);
 
     expect(map.size).toBe(10);
+    expect(map.height).toBe(3);
+    expect(map.blackHeight).toBe(2);
     expect(map.get('A')).toBe(8);
     expect(map.get('KEY')).toBeUndefined();
     expect(map.min).toStrictEqual(['A', 8]);
@@ -38,5 +42,13 @@ describe('TreeMap', () => {
     expect(map.rank('A')).toBe(0);
     expect(map.rank('B')).toBe(1);
     expect(map.rank('Z')).toBe(10);
+  });
+
+  it('perfect black balance', () => {
+    for (let i = 0; i < 1_023; i++) map.set(String(i), i);
+
+    expect(map.size).toBe(1_023);
+    // a perfectly balanced binary tree of height 9 have 1023 nodes (2 ** 10 - 1)
+    expect(map.blackHeight).toBeLessThan(9);
   });
 });
