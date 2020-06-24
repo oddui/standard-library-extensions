@@ -1,11 +1,9 @@
 import TreeMap from './TreeMap';
 
 describe('TreeMap', () => {
-  let map: TreeMap<string, number>;
-
-  beforeEach(() => map = new TreeMap<string, number>());
-
   it('interface', () => {
+    const map = new TreeMap<string, number>();
+
     expect(map.min).toBeUndefined();
     expect(map.max).toBeUndefined();
 
@@ -42,13 +40,37 @@ describe('TreeMap', () => {
     expect(map.rank('A')).toBe(0);
     expect(map.rank('B')).toBe(1);
     expect(map.rank('Z')).toBe(10);
+    expect(map.deleteMin()).toBe(true);
+    expect(map.min).toStrictEqual(['C', 4]);
+    expect(map.deleteMax()).toBe(true);
+    expect(map.max).toStrictEqual(['S', 0]);
+    expect(map.delete('H')).toBe(true);
+    expect(map.delete('H')).toBe(false);
   });
 
   it('perfect black balance', () => {
-    for (let i = 0; i < 1_023; i++) map.set(String(i), i);
+    const h = 10;
+    const size = 2 ** (h + 1) - 1; // 2_047
+    const randomKey = () => String(Math.floor(Math.random() * size));
+    const map = new TreeMap<string, number>();
 
-    expect(map.size).toBe(1_023);
-    // a perfectly balanced binary tree of height 9 have 1023 nodes (2 ** 10 - 1)
-    expect(map.blackHeight).toBeLessThan(9);
+    for (let i = 0; i < size; i++) {
+      map.set(String(i), i);
+    }
+
+    // delete 1000 random keys then add them back
+    new Array(1000)
+      .fill(null)
+      .map(_ => {
+        let key = randomKey();
+        while (!map.delete(key)) {
+          key = randomKey();
+        }
+        return key;
+      })
+      .forEach(key => map.set(key, Number.parseInt(key)));
+
+    expect(map.size).toBe(size);
+    expect(map.blackHeight).toBeLessThanOrEqual(h);
   });
 });

@@ -25,6 +25,10 @@ class Node<K, V> {
 
 /**
  * An ordered symbol table implemented using a left-leaning red-black BST.
+ * 
+ * This implementation provides guaranteed log(n) time cost for the has, get, set and delete
+ * operations. Algorithms are based on those in Robert Sedgewick and Kevin Wayne’s Algorithms 4th
+ * edition.
  */
 export class TreeMap<K, V> implements Map<K, V> {
   private root?: Node<K, V>;
@@ -50,8 +54,8 @@ export class TreeMap<K, V> implements Map<K, V> {
   }
 
   /**
-   * Returns the height of the BST (a 1-node tree has height 0). This method is mostly used for
-   * debugging and testing.
+   * Returns the height of the BST (a 1-node tree has height 0). This method is used for debugging
+   * and testing.
    */
   get height(): number {
     return this._height(this.root);
@@ -59,7 +63,7 @@ export class TreeMap<K, V> implements Map<K, V> {
 
   /**
    * Returns the black height of the red-black BST (a 1-node tree has height 0). This method is
-   * mostly used for debugging and testing.
+   * used for debugging and testing.
    */
   get blackHeight(): number {
     return this._blackHeight(this.root);
@@ -96,16 +100,43 @@ export class TreeMap<K, V> implements Map<K, V> {
     return this;
   }
 
-  deleteMin(key: K): boolean {
-    throw new Error('Method not implemented.');
+  deleteMin(): boolean {
+    if (!this.root) return false;
+
+    if (!this.isRed(this.root.left) && !this.isRed(this.root.right)) {
+      this.root.color = Node.RED;
+    }
+    this.root = this._deleteMin(this.root);
+    if (this.root) this.root.color = Node.BLACK;
+    return true;
   }
 
-  deleteMax(key: K): boolean {
-    throw new Error('Method not implemented.');
+  deleteMax(): boolean {
+    if (!this.root) return false;
+
+    if (!this.isRed(this.root.left) && !this.isRed(this.root.right)) {
+      this.root.color = Node.RED;
+    }
+    this.root = this._deleteMax(this.root);
+    if (this.root) this.root.color = Node.BLACK;
+    return true;
   }
 
+  /**
+   * Deletes the key from this map if exists.
+   * @param key 
+   * @returns `true` if the key existed and has been removed, or `false` if the key does not exist.
+   */
   delete(key: K): boolean {
-    throw new Error('Method not implemented.');
+    if (!this.root) return false;
+    if (!this.has(key)) return false;
+
+    if (!this.isRed(this.root.left) && !this.isRed(this.root.right)) {
+      this.root.color = Node.RED;
+    }
+    this.root = this._delete(this.root, key);
+    if (this.root) this.root.color = Node.BLACK;
+    return true;
   }
 
   clear(): void {
@@ -197,29 +228,6 @@ export class TreeMap<K, V> implements Map<K, V> {
     }
   }
 
-  private _size(x?: Node<K, V>): number {
-    if (!x) return 0;
-    return x.size;
-  }
-
-  private _height(x?: Node<K, V>): number {
-    if (!x) return -1;
-
-    return 1 + Math.max(
-      this._height(x.left),
-      this._height(x.right)
-    );
-  }
-
-  private _blackHeight(x?: Node<K, V>): number {
-    if (!x) return -1;
-
-    return (this.isRed(x) ? 0: 1) + Math.max(
-      this._blackHeight(x.left),
-      this._blackHeight(x.right)
-    );
-  }
-
   private isRed(x?: Node<K, V>) {
     if (!x) return false;
     return x.color === Node.RED;
@@ -270,9 +278,71 @@ export class TreeMap<K, V> implements Map<K, V> {
       (this.isRed(h) && !this.isRed(h.left) && !this.isRed(h.right))
     );
 
-    h.color = Node.RED;
-    h.left.color = Node.BLACK;
-    h.right.color = Node.BLACK;
+    h.color = !h.color;
+    h.left.color = !h.left.color;
+    h.right.color = !h.right.color;
+  }
+
+  /**
+   * Assuming that h is red and both h.left and h.left.left are black, make h.left or one of its
+   * children red.
+   */
+  private moveRedLeft(h: Node<K, V>): Node<K, V> {
+    assertIsDefined(h.right);
+
+    this.flipColors(h);
+    if (this.isRed(h.right.left)) {
+      h.right = this.rotateRight(h.right);
+      h = this.rotateLeft(h);
+    }
+    return h;
+  }
+
+  /**
+   * Assuming that h is red and both h.right and h.right.left are black, make h.right or one of its
+   * children red.
+   */
+  private moveRedRight(h: Node<K, V>): Node<K, V> {
+    this.flipColors(h);
+    if (this.isRed(h.left?.left)) {
+      h = this.rotateRight(h);
+      this.flipColors(h);
+    }
+    return h;
+  }
+
+  /**
+   * Restore red-black tree invariant
+   */
+  private balance(h: Node<K, V>): Node<K, V> {
+    if (this.isRed(h.right)) h = this.rotateLeft(h);
+    if (this.isRed(h.left) && this.isRed(h.left?.left)) h = this.rotateRight(h);
+    if (this.isRed(h.left) && this.isRed(h.right)) this.flipColors(h);
+    h.size = this._size(h.left) + this._size(h.right) + 1;
+    return h;
+  }
+
+  private _size(x?: Node<K, V>): number {
+    if (!x) return 0;
+    return x.size;
+  }
+
+  private _height(x?: Node<K, V>): number {
+    if (!x) return -1;
+
+    return 1 + Math.max(
+      this._height(x.left),
+      this._height(x.right)
+    );
+  }
+
+  private _blackHeight(x?: Node<K, V>): number {
+    if (!x) return -1;
+
+    return (this.isRed(x) ? 0: 1) + Math.max(
+      this._blackHeight(x.left),
+      this._blackHeight(x.right)
+    );
   }
 
   private _get(x: Node<K, V> | undefined, key: K): Node<K, V> | undefined {
@@ -308,6 +378,52 @@ export class TreeMap<K, V> implements Map<K, V> {
 
     h.size = this._size(h.left) + this._size(h.right) + 1;
     return h;
+  }
+
+  private _deleteMin(h: Node<K, V>): Node<K, V> | undefined {
+    if (!h.left) return;
+
+    if (!this.isRed(h.left) && !this.isRed(h.left.left)) {
+      h = this.moveRedLeft(h);
+    }
+    h.left = this._deleteMin(h.left as Node<K, V>);
+    return this.balance(h);
+  }
+
+  private _deleteMax(h: Node<K, V>): Node<K, V> | undefined {
+    if (this.isRed(h.left)) h = this.rotateRight(h);
+    if (!h.right) return;
+
+    if (!this.isRed(h.right) && !this.isRed(h.right.left)) {
+      h = this.moveRedRight(h);
+    }
+    h.right = this._deleteMax(h.right as Node<K, V>);
+    return this.balance(h);
+  }
+
+  private _delete(h: Node<K, V>, key: K): Node<K, V> | undefined {
+    if (this.compare(key, h.key) < 0) {
+      if (!this.isRed(h.left) && !this.isRed((h.left as Node<K, V>).left)) {
+        h = this.moveRedLeft(h);
+      }
+      h.left = this._delete(h.left as Node<K, V>, key);
+    } else {
+      if (this.isRed(h.left)) h = this.rotateRight(h);
+      if (this.compare(key, h.key) === 0 && !h.right) return;
+
+      if (!this.isRed(h.right) && !this.isRed((h.right as Node<K, V>).left)) {
+        h = this.moveRedRight(h);
+      }
+      if (this.compare(key, h.key) === 0) {
+        const x: Node<K, V> = this._min(h.right) as Node<K, V>;
+        h.key = x.key;
+        h.value = x.value;
+        h.right = this._deleteMin(h.right as Node<K, V>);
+      } else {
+        h.right = this._delete(h.right as Node<K, V>, key);
+      }
+    }
+    return this.balance(h);
   }
 
   private _min(x?: Node<K, V>): Node<K, V> | undefined {
