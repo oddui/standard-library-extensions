@@ -1,5 +1,5 @@
 /**
- * A priority queue based on binary heap. The head of this queue is the least key with respect to
+ * A priority queue based on binary heap. The head of this queue is the smallest key with respect to
  * the specified ordering.
  */
 export class IndexPriorityQueue<K> {
@@ -21,14 +21,14 @@ export class IndexPriorityQueue<K> {
     for (let i = 0; i <= capacity; i++) this.qp[i] = -1;
   }
 
-  get leastIndex(): number {
+  get minIndex(): number {
     if (this.n === 0) throw new Error();
 
     return this.pq[1] as number;
   }
 
-  get leastKey(): K {
-    return this.keys[this.leastIndex] as K;
+  get minKey(): K {
+    return this.keys[this.minIndex] as K;
   }
 
   get size(): number {
@@ -73,14 +73,14 @@ export class IndexPriorityQueue<K> {
     this.keys[i] = null;
   }
 
-  deleteLeast(): number {
-    const leastIndex = this.leastIndex;
+  deleteMin(): number {
+    const minIndex = this.minIndex;
     this.exch(1, this.n--);
     this.sink(1);
     this.pq[this.n + 1] = null;
-    this.qp[leastIndex] = -1;
-    this.keys[leastIndex] = null;
-    return leastIndex;
+    this.qp[minIndex] = -1;
+    this.keys[minIndex] = null;
+    return minIndex;
   }
 
   get [Symbol.toStringTag]() {
