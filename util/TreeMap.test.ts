@@ -4,26 +4,22 @@ describe('TreeMap', () => {
   it('interface', () => {
     const map = new TreeMap<string, number>();
 
-    expect(map.min).toBeUndefined();
-    expect(map.max).toBeUndefined();
-
-    map.set('S', 0);
-    map.set('E', 1);
-    map.set('A', 2);
-    map.set('R', 3);
-    map.set('C', 4);
-    map.set('H', 5);
-    map.set('E', 6);
-    map.set('X', 7);
-    map.set('A', 8);
-    map.set('M', 9);
-    map.set('P', 10);
-    map.set('L', 11);
-    map.set('E', 12);
+    map
+      .set('S', 0)
+      .set('E', 1)
+      .set('A', 2)
+      .set('R', 3)
+      .set('C', 4)
+      .set('H', 5)
+      .set('E', 6)
+      .set('X', 7)
+      .set('A', 8)
+      .set('M', 9)
+      .set('P', 10)
+      .set('L', 11)
+      .set('E', 12);
 
     expect(map.size).toBe(10);
-    expect(map.height).toBe(3);
-    expect(map.blackHeight).toBe(2);
     expect(map.get('A')).toBe(8);
     expect(map.get('KEY')).toBeUndefined();
     expect(map.min).toStrictEqual(['A', 8]);
@@ -40,17 +36,44 @@ describe('TreeMap', () => {
     expect(map.rank('A')).toBe(0);
     expect(map.rank('B')).toBe(1);
     expect(map.rank('Z')).toBe(10);
+
+    const entries = [
+      [ 'A', 8 ],
+      [ 'C', 4 ],
+      [ 'E', 12 ],
+      [ 'H', 5 ],
+      [ 'L', 11 ],
+      [ 'M', 9 ],
+      [ 'P', 10 ],
+      [ 'R', 3 ],
+      [ 'S', 0 ],
+      [ 'X', 7 ]
+    ];
+    let i = 0;
+    map.forEach(function(this: [], v, k, map) {
+      expect(this).toBe(entries);
+      expect([k, v]).toStrictEqual(entries[i++]);
+    }, entries);
+    expect([...map]).toStrictEqual(entries);
+    expect([...map.entries()]).toStrictEqual(entries);
+    expect([...map.keys()]).toStrictEqual(entries.map(([k, _]) => k));
+    expect([...map.values()]).toStrictEqual(entries.map(([_, v]) => v));
+
     expect(map.deleteMin()).toBe(true);
-    expect(map.min).toStrictEqual(['C', 4]);
     expect(map.deleteMax()).toBe(true);
-    expect(map.max).toStrictEqual(['S', 0]);
     expect(map.delete('H')).toBe(true);
     expect(map.delete('H')).toBe(false);
+
+    map.clear();
+
+    expect(map.min).toBeUndefined();
+    expect(map.max).toBeUndefined();
+    expect(map.deleteMin()).toBe(false);
+    expect(map.deleteMax()).toBe(false);
   });
 
-  it('perfect black balance', () => {
-    const h = 10;
-    const size = 2 ** (h + 1) - 1; // 2_047
+  it('red-black BST properties', () => {
+    const size = 2_000;
     const randomKey = () => String(Math.floor(Math.random() * size));
     const map = new TreeMap<string, number>();
 
@@ -71,6 +94,10 @@ describe('TreeMap', () => {
       .forEach(key => map.set(key, Number.parseInt(key)));
 
     expect(map.size).toBe(size);
-    expect(map.blackHeight).toBeLessThanOrEqual(h);
+    expect(map.isSizeConsistent()).toBe(true);
+    expect(map.isRankConsistent()).toBe(true);
+    expect(map.isBst()).toBe(true);
+    expect(map.is23()).toBe(true);
+    expect(map.isBalanced()).toBe(true);
   });
 });

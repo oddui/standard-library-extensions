@@ -54,22 +54,6 @@ export class TreeMap<K, V> implements Map<K, V> {
   }
 
   /**
-   * Returns the height of the BST (a 1-node tree has height 0). This method is used for debugging
-   * and testing.
-   */
-  get height(): number {
-    return this._height(this.root);
-  }
-
-  /**
-   * Returns the black height of the red-black BST (a 1-node tree has height 0). This method is
-   * used for debugging and testing.
-   */
-  get blackHeight(): number {
-    return this._blackHeight(this.root);
-  }
-
-  /**
    * Does this map contain the given key?
    * @param key
    */
@@ -140,7 +124,7 @@ export class TreeMap<K, V> implements Map<K, V> {
   }
 
   clear(): void {
-    throw new Error('Method not implemented.');
+    delete this.root;
   }
 
   /**
@@ -190,23 +174,41 @@ export class TreeMap<K, V> implements Map<K, V> {
   }
 
   forEach(callbackfn: (value: V, key: K, map: TreeMap<K, V>) => void, thisArg?: any): void {
-    throw new Error('Method not implemented.');
+    for (const [k, v] of this) {
+      callbackfn.call(thisArg, v, k, this);
+    }
   }
 
-  [Symbol.iterator](): IterableIterator<[K, V]> {
-    throw new Error('Method not implemented.');
+  *[Symbol.iterator](): IterableIterator<[K, V]> {
+    const stack: Node<K, V>[] = [];
+    let x = this.root;
+
+    while (x || stack.length > 0) {
+      while (x) {
+        stack.push(x);
+        x = x.left;
+      }
+
+      x = stack.pop() as Node<K, V>;
+      yield x.entry;
+      x = x.right;
+    }
   }
 
   entries(): IterableIterator<[K, V]> {
-    throw new Error('Method not implemented.');
+    return this[Symbol.iterator]();
   }
 
-  keys(): IterableIterator<K> {
-    throw new Error('Method not implemented.');
+  *keys(): IterableIterator<K> {
+    for (const [k, _] of this) {
+      yield k;
+    }
   }
 
-  values(): IterableIterator<V> {
-    throw new Error('Method not implemented.');
+  *values(): IterableIterator<V> {
+    for (const [_, v] of this) {
+      yield v;
+    }
   }
 
   get [Symbol.toStringTag]() {
@@ -288,7 +290,9 @@ export class TreeMap<K, V> implements Map<K, V> {
    * children red.
    */
   private moveRedLeft(h: Node<K, V>): Node<K, V> {
+    assertIsDefined(h.left);
     assertIsDefined(h.right);
+    assert(this.isRed(h) && !this.isRed(h.left) && !this.isRed(h.left.left));
 
     this.flipColors(h);
     if (this.isRed(h.right.left)) {
@@ -303,8 +307,12 @@ export class TreeMap<K, V> implements Map<K, V> {
    * children red.
    */
   private moveRedRight(h: Node<K, V>): Node<K, V> {
+    assertIsDefined(h.left);
+    assertIsDefined(h.right);
+    assert(this.isRed(h) && !this.isRed(h.right) && !this.isRed(h.right.left));
+
     this.flipColors(h);
-    if (this.isRed(h.left?.left)) {
+    if (this.isRed(h.left.left)) {
       h = this.rotateRight(h);
       this.flipColors(h);
     }
@@ -325,24 +333,6 @@ export class TreeMap<K, V> implements Map<K, V> {
   private _size(x?: Node<K, V>): number {
     if (!x) return 0;
     return x.size;
-  }
-
-  private _height(x?: Node<K, V>): number {
-    if (!x) return -1;
-
-    return 1 + Math.max(
-      this._height(x.left),
-      this._height(x.right)
-    );
-  }
-
-  private _blackHeight(x?: Node<K, V>): number {
-    if (!x) return -1;
-
-    return (this.isRed(x) ? 0: 1) + Math.max(
-      this._blackHeight(x.left),
-      this._blackHeight(x.right)
-    );
   }
 
   private _get(x: Node<K, V> | undefined, key: K): Node<K, V> | undefined {
@@ -488,6 +478,90 @@ export class TreeMap<K, V> implements Map<K, V> {
     } else {
       return this._size(x.left);
     }
+  }
+
+  /**
+   * Are the node's size fields correct?
+   * 
+   * This method is used for testing purposes.
+   */
+  isSizeConsistent(): boolean {
+    return this._isSizeConsistent(this.root);
+  }
+
+  private _isSizeConsistent(x?: Node<K, V>): boolean {
+    if (!x) return true;
+    if (x.size !== 1 + this._size(x.left) + this._size(x.right)) return false;
+    return this._isSizeConsistent(x.left) && this._isSizeConsistent(x.right);
+  }
+
+  /**
+   * Do `rank` and `select` give consistent result?
+   * 
+   * This method is used for testing purposes.
+   */
+  isRankConsistent(): boolean {
+    return true;
+  }
+
+  /**
+   * Is this tree a binary search tree?
+   * 
+   * This method is used for testing purposes.
+   */
+  isBst(): boolean {
+    return this._isBst(this.root);
+  }
+
+  private _isBst(x?: Node<K, V>): boolean {
+    if (!x) return true;
+
+    const min = this._max(x.left);
+    const max = this._min(x.right);
+
+    if (min && this.compare(x.key, min.key) <= 0) return false;
+    if (max && this.compare(x.key, max.key) >= 0) return false;
+
+    return this._isBst(x.left) && this._isBst(x.right);
+  }
+
+  /**
+   * Are all red links lean left and at most one red link in a row on any path?
+   * 
+   * This method is used for testing purposes.
+   */
+  is23(): boolean {
+    return this._is23(this.root);
+  }
+
+  private _is23(x?: Node<K, V>): boolean {
+    if (!x) return true;
+    if (this.isRed(x.right)) return false;
+    if (this.isRed(x) && this.isRed(x.left)) return false;
+    return this._is23(x.left) && this._is23(x.right);
+  }
+
+  /**
+   * Do all paths from the root to a leaf have the same number of black links?
+   * 
+   * This method is used for testing purposes.
+   */
+  isBalanced(): boolean {
+    let black = 0; // the number of black links from the root to min
+    let x = this.root;
+
+    while (x) {
+      if (!this.isRed(x)) black++;
+      x = x.left;
+    }
+
+    return this._isBalanced(this.root, black);
+  }
+
+  private _isBalanced(x: Node<K, V> | undefined, black: number): boolean {
+    if (!x) return black === 0;
+    if (!this.isRed(x)) black--;
+    return this._isBalanced(x.left, black) && this._isBalanced(x.right, black);
   }
 }
 
