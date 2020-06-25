@@ -25,7 +25,7 @@ export class PriorityQueue<K> {
     return this.n;
   }
 
-  insert(key: K): void {
+  add(key: K): void {
     if (this.n === this.pq.length - 1) throw new Error();
 
     this.pq[++this.n] = key;
