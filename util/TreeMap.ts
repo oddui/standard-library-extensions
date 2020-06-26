@@ -26,9 +26,9 @@ class Node<K, V> {
 /**
  * An ordered symbol table implemented using a left-leaning red-black BST.
  * 
- * This implementation provides guaranteed log(n) time cost for the has, get, set and delete
- * operations. Algorithms are based on those in Robert Sedgewick and Kevin Wayne’s Algorithms 4th
- * edition.
+ * This implementation provides O(log(n)) time cost for `has`, `get`, `set`, `delete`, `deleteMin`,
+ * `deleteMax` methods and order based queries(floor, ceil, select and rank). Algorithms are based
+ * on those in Robert Sedgewick and Kevin Wayne’s Algorithms 4th edition.
  */
 export class TreeMap<K, V> implements Map<K, V> {
   private root?: Node<K, V>;
@@ -47,14 +47,14 @@ export class TreeMap<K, V> implements Map<K, V> {
   }
 
   /**
-   * Returns the number of entries in this map.
+   * Returns the number of key-value pairs in this map.
    */
   get size(): number {
     return this._size(this.root);
   }
 
   /**
-   * Does this map contain the given key?
+   * Does this map contain `key`?
    * @param key
    */
   has(key: K): boolean {
@@ -62,9 +62,10 @@ export class TreeMap<K, V> implements Map<K, V> {
   }
 
   /**
-   * Returns the value associated with the given key. Or `undefined` if this map does not contain
-   * the given key. A return value of `undefined` does not necessarily indicate that this map does
-   * not contain the key. It's also possible that the map explicitly maps the key to `undefined`.
+   * Returns the value associated with `key`. Or `undefined` if this map does not contain the given
+   * key. A return value of `undefined` does not necessarily indicate that this map does not contain
+   * the key. It's also possible that the map explicitly maps the key to `undefined`. The `has`
+   * operation may be used to distinguish these two cases.
    * @param key
    * @return the value associated with the given key, or `undefined` if the key is not in the map
    */
@@ -84,6 +85,10 @@ export class TreeMap<K, V> implements Map<K, V> {
     return this;
   }
 
+  /**
+   * Deletes the smallest key and it's associated value.
+   * @returns `true` if the smallest key has been removed, or `false` if the map is empty
+   */
   deleteMin(): boolean {
     if (!this.root) return false;
 
@@ -95,6 +100,10 @@ export class TreeMap<K, V> implements Map<K, V> {
     return true;
   }
 
+  /**
+   * Deletes the largest key and it's associated value.
+   * @returns `true` if the largest key has been removed, or `false` if the map is empty
+   */
   deleteMax(): boolean {
     if (!this.root) return false;
 
@@ -107,9 +116,9 @@ export class TreeMap<K, V> implements Map<K, V> {
   }
 
   /**
-   * Deletes the key from this map if exists.
-   * @param key 
-   * @returns `true` if the key existed and has been removed, or `false` if the key does not exist.
+   * Deletes `key` and it's associated value.
+   * @param key
+   * @returns `true` if the key existed and has been removed, or `false` if the key does not exist
    */
   delete(key: K): boolean {
     if (!this.root) return false;
@@ -123,6 +132,9 @@ export class TreeMap<K, V> implements Map<K, V> {
     return true;
   }
 
+  /**
+   * Deletes all key-value pairs from this map. 
+   */
   clear(): void {
     delete this.root;
   }
