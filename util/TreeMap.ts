@@ -140,21 +140,21 @@ export class TreeMap<K, V> implements Map<K, V> {
   }
 
   /**
-   * Returns the entry with the smallest key.
+   * Returns the key-value pair with the smallest key.
    */
   get min(): [K, V] | undefined {
     return this._min(this.root)?.entry;
   }
 
   /**
-   * Returns the entry with the largest key.
+   * Returns the key-value pair with the largest key.
    */
   get max(): [K, V] | undefined {
     return this._max(this.root)?.entry;
   }
 
   /**
-   * Returns the entry with the largest key less than or equal to `key`.
+   * Returns the key-value pair with the largest key less than or equal to `key`.
    * @param key
    */
   floor(key: K): [K, V] | undefined {
@@ -162,7 +162,7 @@ export class TreeMap<K, V> implements Map<K, V> {
   }
 
   /**
-   * Returns the entry with the smallest key greater than or equal to `key`.
+   * Returns the key-value pair with the smallest key greater than or equal to `key`.
    * @param key
    */
   ceil(key: K): [K, V] | undefined {
@@ -170,7 +170,7 @@ export class TreeMap<K, V> implements Map<K, V> {
   }
 
   /**
-   * Return the entry of a given `rank`.
+   * Return the key-value pair of a given `rank`.
    * @param rank
    */
   select(rank: number): [K, V] | undefined {
@@ -185,12 +185,20 @@ export class TreeMap<K, V> implements Map<K, V> {
     return this._rank(this.root, key);
   }
 
-  forEach(callbackfn: (value: V, key: K, map: TreeMap<K, V>) => void, thisArg?: any): void {
+  /**
+   * Calls `callbackFn` once for each key-value pair in order.
+   * @param {CallbackFn} callbackFn
+   * @param thisArg the `this` value for each invocation of `callbackFn`
+   */
+  forEach(callbackFn: (value: V, key: K, map: TreeMap<K, V>) => void, thisArg?: any): void {
     for (const [k, v] of this) {
-      callbackfn.call(thisArg, v, k, this);
+      callbackFn.call(thisArg, v, k, this);
     }
   }
 
+  /**
+   * Returns a new `Iterator` object that contains the key-value pairs in order.
+   */
   *[Symbol.iterator](): IterableIterator<[K, V]> {
     const stack: Node<K, V>[] = [];
     let x = this.root;
@@ -207,16 +215,25 @@ export class TreeMap<K, V> implements Map<K, V> {
     }
   }
 
+  /**
+   * Returns a new `Iterator` object that contains the key-value pairs in order.
+   */
   entries(): IterableIterator<[K, V]> {
     return this[Symbol.iterator]();
   }
 
+  /**
+   * Returns a new `Iterator` object that contains the keys in order.
+   */
   *keys(): IterableIterator<K> {
     for (const [k, _] of this) {
       yield k;
     }
   }
 
+  /**
+   * Returns a new `Iterator` object that contains the values in order.
+   */
   *values(): IterableIterator<V> {
     for (const [_, v] of this) {
       yield v;
