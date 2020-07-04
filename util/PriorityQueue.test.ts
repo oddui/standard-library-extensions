@@ -1,8 +1,9 @@
 import PriorityQueue from './PriorityQueue';
 
 describe('PriorityQueue', () => {
-  it('interface', () => {
+  it('smoke test', () => {
     const pq = new PriorityQueue<string>(9);
+    expect(pq.toString()).toBe('[object PriorityQueue]');
 
     pq
       .add('P')
@@ -16,18 +17,28 @@ describe('PriorityQueue', () => {
       .add('E');
 
     expect(() => pq.add('E')).toThrow(RangeError);
-    expect(pq.size).toEqual(9);
-    expect(pq.min).toEqual('A');
-    expect(pq.deleteMin()).toEqual('A');
-    expect(pq.deleteMin()).toEqual('E');
-    expect(pq.deleteMin()).toEqual('E');
-    expect(pq.deleteMin()).toEqual('L');
-    expect(pq.deleteMin()).toEqual('M');
-    expect(pq.deleteMin()).toEqual('P');
-    expect(pq.deleteMin()).toEqual('P');
-    expect(pq.deleteMin()).toEqual('Q');
-    expect(pq.deleteMin()).toEqual('X');
+    expect(pq.size).toBe(9);
+    expect(pq.min).toBe('A');
+    expect(pq.deleteMin()).toBe('A');
+    expect(pq.deleteMin()).toBe('E');
+    expect(pq.deleteMin()).toBe('E');
+    expect(pq.deleteMin()).toBe('L');
+    expect(pq.deleteMin()).toBe('M');
+    expect(pq.deleteMin()).toBe('P');
+    expect(pq.deleteMin()).toBe('P');
+    expect(pq.deleteMin()).toBe('Q');
+    expect(pq.deleteMin()).toBe('X');
     expect(pq.deleteMin()).toBeUndefined();
     expect(pq.min).toBeUndefined();
+  });
+
+  it('uses compareFn', () => {
+    const pq = new PriorityQueue<number>(3, (a, b) => a - b);
+    pq
+      .add(10)
+      .add(2)
+      .add(3);
+
+    expect(pq.min).toBe(2);
   });
 });

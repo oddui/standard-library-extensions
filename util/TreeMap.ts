@@ -353,7 +353,7 @@ export class TreeMap<K, V> implements Map<K, V> {
    */
   private balance(h: Node<K, V>): Node<K, V> {
     if (this.isRed(h.right)) h = this.rotateLeft(h);
-    if (this.isRed(h.left) && this.isRed(h.left?.left)) h = this.rotateRight(h);
+    if (this.isRed(h.left) && this.isRed(h.left!.left)) h = this.rotateRight(h);
     if (this.isRed(h.left) && this.isRed(h.right)) this.flipColors(h);
     h.size = this._size(h.left) + this._size(h.right) + 1;
     return h;
@@ -392,7 +392,7 @@ export class TreeMap<K, V> implements Map<K, V> {
     }
 
     if (this.isRed(h.right) && !this.isRed(h.left)) h = this.rotateLeft(h);
-    if (this.isRed(h.left) && this.isRed(h.left?.left)) h = this.rotateRight(h);
+    if (this.isRed(h.left) && this.isRed(h.left!.left)) h = this.rotateRight(h);
     if (this.isRed(h.left) && this.isRed(h.right)) this.flipColors(h);
 
     h.size = this._size(h.left) + this._size(h.right) + 1;
@@ -514,10 +514,12 @@ export class TreeMap<K, V> implements Map<K, V> {
    * 
    * This method is used for testing purposes.
    */
+  /* istanbul ignore next */
   isSizeConsistent(): boolean {
     return this._isSizeConsistent(this.root);
   }
 
+  /* istanbul ignore next */
   private _isSizeConsistent(x?: Node<K, V>): boolean {
     if (!x) return true;
     if (x.size !== 1 + this._size(x.left) + this._size(x.right)) return false;
@@ -529,7 +531,16 @@ export class TreeMap<K, V> implements Map<K, V> {
    * 
    * This method is used for testing purposes.
    */
+  /* istanbul ignore next */
   isRankConsistent(): boolean {
+    for (let i = 0; i < this.size; i++) {
+      const entry = this.select(i);
+      if (!entry || this.rank(entry[0]) !== i) return false;
+    }
+    for (const k of this.keys()) {
+      const entry = this.select(this.rank(k));
+      if (!entry || this.compare(k, entry[0]) !== 0) return false;
+    }
     return true;
   }
 
@@ -538,10 +549,12 @@ export class TreeMap<K, V> implements Map<K, V> {
    * 
    * This method is used for testing purposes.
    */
+  /* istanbul ignore next */
   isBst(): boolean {
     return this._isBst(this.root);
   }
 
+  /* istanbul ignore next */
   private _isBst(x?: Node<K, V>): boolean {
     if (!x) return true;
 
@@ -559,10 +572,12 @@ export class TreeMap<K, V> implements Map<K, V> {
    * 
    * This method is used for testing purposes.
    */
+  /* istanbul ignore next */
   is23(): boolean {
     return this._is23(this.root);
   }
 
+  /* istanbul ignore next */
   private _is23(x?: Node<K, V>): boolean {
     if (!x) return true;
     if (this.isRed(x.right)) return false;
@@ -575,6 +590,7 @@ export class TreeMap<K, V> implements Map<K, V> {
    * 
    * This method is used for testing purposes.
    */
+  /* istanbul ignore next */
   isBalanced(): boolean {
     let black = 0; // the number of black links from the root to min
     let x = this.root;
@@ -587,6 +603,7 @@ export class TreeMap<K, V> implements Map<K, V> {
     return this._isBalanced(this.root, black);
   }
 
+  /* istanbul ignore next */
   private _isBalanced(x: Node<K, V> | undefined, black: number): boolean {
     if (!x) return black === 0;
     if (!this.isRed(x)) black--;
