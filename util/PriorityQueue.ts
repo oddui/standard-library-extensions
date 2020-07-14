@@ -1,3 +1,5 @@
+import { CompareFn } from './helper';
+
 /**
  * A priority queue based on binary heap. It does not preserve the insertion order of equal keys.
  * 
@@ -10,7 +12,7 @@ export class PriorityQueue<K> {
    */
   private pq: Array<K>;
   private n: number = 0;
-  private compareFn?: (a: K, b: K) => number;
+  private compareFn?: CompareFn<K>;
 
   /**
    * Creates a `PriorityQueue` with the specified capacity that orders its keys according to the

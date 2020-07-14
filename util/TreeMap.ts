@@ -1,4 +1,4 @@
-import { CompareFn, assert, assertIsDefined } from './types';
+import { CompareFn, assertIsDefined } from './helper';
 
 class Node<K, V> {
   public static get BLACK(): boolean { return false; }
@@ -269,7 +269,6 @@ export class TreeMap<K, V> implements Map<K, V> {
    */
   private rotateLeft(h: Node<K, V>): Node<K, V> {
     assertIsDefined(h.right);
-    assert(this.isRed(h.right));
 
     const x = h.right;
     h.right = x.left;
@@ -286,7 +285,6 @@ export class TreeMap<K, V> implements Map<K, V> {
    */
   private rotateRight(h: Node<K, V>): Node<K, V> {
     assertIsDefined(h.left);
-    assert(this.isRed(h.left));
 
     const x = h.left;
     h.left = x.right;
@@ -304,10 +302,6 @@ export class TreeMap<K, V> implements Map<K, V> {
   private flipColors(h: Node<K, V>): void {
     assertIsDefined(h.left);
     assertIsDefined(h.right);
-    assert(
-      (!this.isRed(h) && this.isRed(h.left) && this.isRed(h.right)) ||
-      (this.isRed(h) && !this.isRed(h.left) && !this.isRed(h.right))
-    );
 
     h.color = !h.color;
     h.left.color = !h.left.color;
@@ -321,7 +315,6 @@ export class TreeMap<K, V> implements Map<K, V> {
   private moveRedLeft(h: Node<K, V>): Node<K, V> {
     assertIsDefined(h.left);
     assertIsDefined(h.right);
-    assert(this.isRed(h) && !this.isRed(h.left) && !this.isRed(h.left.left));
 
     this.flipColors(h);
     if (this.isRed(h.right.left)) {
@@ -338,7 +331,6 @@ export class TreeMap<K, V> implements Map<K, V> {
   private moveRedRight(h: Node<K, V>): Node<K, V> {
     assertIsDefined(h.left);
     assertIsDefined(h.right);
-    assert(this.isRed(h) && !this.isRed(h.right) && !this.isRed(h.right.left));
 
     this.flipColors(h);
     if (this.isRed(h.left.left)) {

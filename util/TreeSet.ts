@@ -1,4 +1,4 @@
-import { CompareFn } from './types';
+import { CompareFn } from './helper';
 import TreeMap from './TreeMap';
 
 /**
