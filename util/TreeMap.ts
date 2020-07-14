@@ -32,7 +32,7 @@ class Node<K, V> {
  */
 export class TreeMap<K, V> implements Map<K, V> {
   private root?: Node<K, V>;
-  private compareFn?: (a: K, b: K) => number;
+  private compareFn?: CompareFn<K>;
 
   /**
    * @param compareFn Function used to determine the order of the keys. It is expected to return a

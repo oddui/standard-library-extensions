@@ -25,7 +25,7 @@ export class PriorityQueue<K> {
    * const pq = new PriorityQueue<number>((a, b) => a - b);
    * ```
    */
-  constructor(capacity: number, compareFn?: (a: K, b: K) => number) {
+  constructor(capacity: number, compareFn?: CompareFn<K>) {
     this.compareFn = compareFn;
     this.pq = new Array(capacity + 1);
   }

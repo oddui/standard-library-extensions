@@ -28,7 +28,7 @@ export class IndexPriorityQueue<K> {
    * const pq = new IndexPriorityQueue<number>((a, b) => a - b);
    * ```
    */
-  constructor(capacity: number, compareFn?: (a: K, b: K) => number) {
+  constructor(capacity: number, compareFn?: CompareFn<K>) {
     this.compareFn = compareFn;
     this.pq = new Array(capacity + 1);
     this.qp = new Array(capacity);
