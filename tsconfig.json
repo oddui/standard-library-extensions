@@ -9,16 +9,13 @@
     "strict": true,
     "noImplicitReturns": true,
     "noUnusedLocals": true,
-    "suppressImplicitAnyIndexErrors": true,
     "forceConsistentCasingInFileNames": true,
-    "allowSyntheticDefaultImports": true,
-    "resolveJsonModule": true,
     "esModuleInterop": true,
     "moduleResolution": "node",
-    "module": "commonjs",
     "jsx": "react",
     "sourceMap": true,
-    "outDir": "dist"
+    "outDir": "dist",
+    "rootDir": "."
   },
   "include": [
     "util",
