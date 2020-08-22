@@ -4,6 +4,7 @@
   "description": "JavaScript standard library extensions for building complex and scalable web applications.",
   "main": "index.js",
   "scripts": {
+    "build": "tsc",
     "test": "jest --config jestconfig.json"
   },
   "author": "Ziyu",
