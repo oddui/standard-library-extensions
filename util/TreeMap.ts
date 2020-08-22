@@ -345,7 +345,8 @@ export class TreeMap<K, V> implements Map<K, V> {
    */
   private balance(h: Node<K, V>): Node<K, V> {
     if (this.isRed(h.right)) h = this.rotateLeft(h);
-    if (this.isRed(h.left) && this.isRed(h.left!.left)) h = this.rotateRight(h);
+    // @ts-expect-error
+    if (this.isRed(h.left) && this.isRed(h.left.left)) h = this.rotateRight(h);
     if (this.isRed(h.left) && this.isRed(h.right)) this.flipColors(h);
     h.size = this._size(h.left) + this._size(h.right) + 1;
     return h;
@@ -384,7 +385,8 @@ export class TreeMap<K, V> implements Map<K, V> {
     }
 
     if (this.isRed(h.right) && !this.isRed(h.left)) h = this.rotateLeft(h);
-    if (this.isRed(h.left) && this.isRed(h.left!.left)) h = this.rotateRight(h);
+    // @ts-expect-error
+    if (this.isRed(h.left) && this.isRed(h.left.left)) h = this.rotateRight(h);
     if (this.isRed(h.left) && this.isRed(h.right)) this.flipColors(h);
 
     h.size = this._size(h.left) + this._size(h.right) + 1;
