@@ -1,5 +1,3 @@
-import { CompareFn } from './helper';
-
 /**
  * An index priority queue based on binary heap. It does not preserve the insertion order of equal
  * keys. An index priority queue is similar to an array but with fast access to the smallest entry.
@@ -15,7 +13,7 @@ export class IndexPriorityQueue<K> {
   private qp: Array<number>;
   private keys: Array<K>;
   private n: number = 0;
-  private compareFn?: CompareFn<K>;
+  private compareFn?: (a: K, b: K) => number;
 
   /**
    * Creates an `IndexPriorityQueue` with the specified capacity that orders its keys according to
@@ -28,7 +26,7 @@ export class IndexPriorityQueue<K> {
    * const pq = new IndexPriorityQueue<number>((a, b) => a - b);
    * ```
    */
-  constructor(capacity: number, compareFn?: CompareFn<K>) {
+  constructor(capacity: number, compareFn?: (a: K, b: K) => number) {
     this.compareFn = compareFn;
     this.pq = new Array(capacity + 1);
     this.qp = new Array(capacity);

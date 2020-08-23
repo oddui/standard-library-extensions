@@ -1,4 +1,3 @@
-import { CompareFn } from './helper';
 import TreeMap from './TreeMap';
 
 /**
@@ -9,7 +8,7 @@ export class TreeSet<T> implements Set<T> {
   private static PRESENT: boolean = true;
   private m: TreeMap<T, typeof TreeSet.PRESENT>;
 
-  constructor(compareFn?: CompareFn<T>) {
+  constructor(compareFn?: (a: T, b: T) => number) {
     this.m = new TreeMap(compareFn);
   }
 

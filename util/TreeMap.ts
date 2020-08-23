@@ -1,4 +1,4 @@
-import { CompareFn, assertIsDefined } from './helper';
+import { assertIsDefined } from './helper';
 
 class Node<K, V> {
   public static get BLACK(): boolean { return false; }
@@ -32,7 +32,7 @@ class Node<K, V> {
  */
 export class TreeMap<K, V> implements Map<K, V> {
   private root?: Node<K, V>;
-  private compareFn?: CompareFn<K>;
+  private compareFn?: (a: K, b: K) => number;
 
   /**
    * @param compareFn Function used to determine the order of the keys. It is expected to return a
@@ -42,7 +42,7 @@ export class TreeMap<K, V> implements Map<K, V> {
    * const map = new TreeMap<number, number>((a, b) => a - b);
    * ```
    */
-  constructor(compareFn?: CompareFn<K>) {
+  constructor(compareFn?: (a: K, b: K) => number) {
     this.compareFn = compareFn;
   }
 
