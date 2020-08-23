@@ -1,4 +1,4 @@
-import { assertIsDefined } from './helper';
+import { assertIsDefined } from './assert';
 
 it('assertIsDefined', () => {
   expect(() => assertIsDefined(undefined)).toThrow();

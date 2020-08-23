@@ -1,4 +1,4 @@
-import { assertIsDefined } from './helper';
+import { assertIsDefined } from '../helper/assert';
 
 class Node<K, V> {
   public static get BLACK(): boolean { return false; }

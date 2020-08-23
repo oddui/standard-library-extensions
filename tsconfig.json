@@ -13,6 +13,7 @@
     "rootDir": "."
   },
   "include": [
+    "helper",
     "util",
     "ui"
   ],
