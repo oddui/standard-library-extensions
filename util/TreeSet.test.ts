@@ -78,13 +78,13 @@ describe('TreeMap', () => {
   });
   
   it('uses compareFn', () => {
-    const map = new TreeSet<number>((a, b) => a - b);
+    const set = new TreeSet<number>((a, b) => a - b);
 
-    map
+    set
       .add(10)
       .add(2);
 
-    expect(map.min).toBe(2);
-    expect(map.max).toBe(10);
+    expect(set.min).toBe(2);
+    expect(set.max).toBe(10);
   });
 });
