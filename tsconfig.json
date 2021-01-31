@@ -8,15 +8,10 @@
     "moduleResolution": "node",
     "noImplicitReturns": true,
     "noUnusedLocals": true,
-    "jsx": "react",
-    "outDir": "dist",
-    "rootDir": "."
+    "jsx": "react-jsx",
+    "outDir": "dist"
   },
-  "include": [
-    "helper",
-    "util",
-    "ui"
-  ],
+  "include": ["src"],
   "exclude": [
     "**/*.test.ts"
   ]
