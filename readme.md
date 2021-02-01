@@ -20,7 +20,15 @@ Reusable React components.
 
 Copy and paste code. Or use a package manager:
 
-    $ npm install standard-library-extensions
+```sh
+$ npm install standard-library-extensions
+```
+
+```js
+import binarySearch from 'standard-library-extensions/util/binarySearch';
+import { binarySearch } from 'standard-library-extensions/util';
+import { binarySearch } from 'standard-library-extensions';
+```
 
 ## Release
 
