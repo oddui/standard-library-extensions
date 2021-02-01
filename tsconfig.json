@@ -2,7 +2,6 @@
   "compilerOptions": {
     "target": "es2019",
     "strict": true,
-    "declaration": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "moduleResolution": "node",
@@ -13,6 +12,6 @@
   },
   "include": ["src"],
   "exclude": [
-    "**/*.test.ts"
+    "src/**/*.test.ts"
   ]
 }

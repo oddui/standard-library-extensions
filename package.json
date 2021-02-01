@@ -7,13 +7,18 @@
     "url": "https://github.com/oddui/standard-library-extensions"
   },
   "scripts": {
-    "build": "tsc",
-    "clean": "rimraf dist coverage",
-    "prepare": "npm run clean && npm run build",
+    "ts:es": "tsc",
+    "ts:defs": "tsc --declaration --outDir . --emitDeclarationOnly",
+    "build": "npm run ts:es && npm run ts:defs",
+    "clean": "rimraf index.d.ts helper util ui dist coverage",
+    "prepublishOnly": "npm run test && npm run build",
+    "postpublish": "npm run clean",
     "test": "jest --config jestconfig.json"
   },
   "author": "Ziyu",
   "license": "Apache-2.0",
+  "main": "dist/index.js",
+  "types": "index.d.ts",
   "files": [
     "dist"
   ],
