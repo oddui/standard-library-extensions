@@ -25,9 +25,8 @@ $ npm install standard-library-extensions
 ```
 
 ```js
-import binarySearch from 'standard-library-extensions/util/binarySearch';
-import { binarySearch } from 'standard-library-extensions/util';
-import { binarySearch } from 'standard-library-extensions';
+import binarySearch from 'standard-library-extensions/dist/util/binarySearch';
+import { binarySearch } from 'standard-library-extensions/dist/util';
 ```
 
 ## Release
