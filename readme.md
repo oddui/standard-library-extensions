@@ -8,7 +8,7 @@ Useful algorithms and data structures.
 
 ### Design choices
 
-- Align with convensions and interfaces of JavaScript standard built-in objects. e.g. `TreeMap` extends the built-in `Map` interface.
+- Align with conventions and interfaces of JavaScript standard built-in objects. e.g. `TreeMap` extends the built-in `Map` interface.
 - Concise code
 - No external depencendies
 
