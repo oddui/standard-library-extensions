@@ -1,8 +1,8 @@
 /**
  * A priority queue based on binary heap. It does not preserve the insertion order of equal keys.
  * 
- * This implementation provides O(log(n)) time for `add and deleteMin`; constant time for `min` and
- * `size`.
+ * This implementation provides O(log(n)) time for `add` and `deleteMin`; constant time for `min`
+ * and `size`.
  */
 export class PriorityQueue<K> {
   /**
