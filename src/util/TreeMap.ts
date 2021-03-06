@@ -1,5 +1,3 @@
-import { assertIsDefined } from '../helper/assert';
-
 class Node<K, V> {
   public static get BLACK(): boolean { return false; }
   public static get RED(): boolean { return true; }
@@ -268,9 +266,7 @@ export class TreeMap<K, V> implements Map<K, V> {
    * Makes a right-leaning red link to a left-leaning one
    */
   private rotateLeft(h: Node<K, V>): Node<K, V> {
-    assertIsDefined(h.right);
-
-    const x = h.right;
+    const x = h.right!;
     h.right = x.left;
     x.left = h;
     x.color = h.color;
@@ -284,9 +280,7 @@ export class TreeMap<K, V> implements Map<K, V> {
    * Makes a left-leaning red link to a right-leaning one
    */
   private rotateRight(h: Node<K, V>): Node<K, V> {
-    assertIsDefined(h.left);
-
-    const x = h.left;
+    const x = h.left!;
     h.left = x.right;
     x.right = h;
     x.color = h.color;
@@ -300,11 +294,10 @@ export class TreeMap<K, V> implements Map<K, V> {
    * Flips the colors of a node and it's children
    */
   private flipColors(h: Node<K, V>): void {
-    assertIsDefined(h.left);
-    assertIsDefined(h.right);
-
     h.color = !h.color;
+    // @ts-expect-error: h.left is defined
     h.left.color = !h.left.color;
+    // @ts-expect-error: h.right is defined
     h.right.color = !h.right.color;
   }
 
@@ -313,11 +306,10 @@ export class TreeMap<K, V> implements Map<K, V> {
    * children red.
    */
   private moveRedLeft(h: Node<K, V>): Node<K, V> {
-    assertIsDefined(h.left);
-    assertIsDefined(h.right);
-
     this.flipColors(h);
+    // @ts-expect-error: h.right is defined
     if (this.isRed(h.right.left)) {
+      // @ts-expect-error: h.right is defined
       h.right = this.rotateRight(h.right);
       h = this.rotateLeft(h);
     }
@@ -329,10 +321,8 @@ export class TreeMap<K, V> implements Map<K, V> {
    * children red.
    */
   private moveRedRight(h: Node<K, V>): Node<K, V> {
-    assertIsDefined(h.left);
-    assertIsDefined(h.right);
-
     this.flipColors(h);
+    // @ts-expect-error: h.left is defined
     if (this.isRed(h.left.left)) {
       h = this.rotateRight(h);
       this.flipColors(h);
@@ -345,7 +335,7 @@ export class TreeMap<K, V> implements Map<K, V> {
    */
   private balance(h: Node<K, V>): Node<K, V> {
     if (this.isRed(h.right)) h = this.rotateLeft(h);
-    // @ts-expect-error
+    // @ts-expect-error: h.left is defined
     if (this.isRed(h.left) && this.isRed(h.left.left)) h = this.rotateRight(h);
     if (this.isRed(h.left) && this.isRed(h.right)) this.flipColors(h);
     h.size = this._size(h.left) + this._size(h.right) + 1;
