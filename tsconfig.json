@@ -10,6 +10,7 @@
     "noUnusedLocals": true,
     "jsx": "react-jsx",
     "declaration": true,
+    "rootDir": "src",
     "outDir": "dist"
   },
   "include": ["src"],
