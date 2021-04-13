@@ -1,7 +1,7 @@
 /**
  * An index priority queue based on binary heap. It does not preserve the insertion order of equal
  * keys. An index priority queue is similar to an array but with fast access to the smallest entry.
- * 
+ *
  * This implementation provides O(log(n)) time for `set, delete and deleteMin`; constant time for
  * `min`, `size`, `has` and `get`.
  */
@@ -135,24 +135,29 @@ export class IndexPriorityQueue<K> {
   }
 
   get [Symbol.toStringTag]() {
-    return 'IndexPriorityQueue';
+    return "IndexPriorityQueue";
   }
 
   private less(i: number, j: number): boolean {
     if (this.compareFn) {
-      return this.compareFn(
-        this.keys[this.pq[i] as number] as K,
-        this.keys[this.pq[j] as number] as K
-      ) < 0;
+      return (
+        this.compareFn(
+          this.keys[this.pq[i] as number] as K,
+          this.keys[this.pq[j] as number] as K
+        ) < 0
+      );
     }
 
-    return String(this.keys[this.pq[i] as number]) < String(this.keys[this.pq[j] as number]);
+    return (
+      String(this.keys[this.pq[i] as number]) <
+      String(this.keys[this.pq[j] as number])
+    );
   }
 
   private exch(i: number, j: number): void {
     const tmpIndex = this.pq[i] as number;
     this.pq[i] = this.pq[j];
-    this.qp[this.pq[j] as number] = i; 
+    this.qp[this.pq[j] as number] = i;
     this.pq[j] = tmpIndex;
     this.qp[tmpIndex] = j;
   }

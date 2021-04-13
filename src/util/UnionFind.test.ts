@@ -1,7 +1,7 @@
-import UnionFind from './UnionFind';
+import UnionFind from "./UnionFind";
 
-describe('UnionFind', () => {
-  it('smoke test', () => {
+describe("UnionFind", () => {
+  it("smoke test", () => {
     const pairs = [
       [4, 3],
       [3, 8],
@@ -23,7 +23,7 @@ describe('UnionFind', () => {
       uf.union(p, q);
     }
 
-    expect(uf.toString()).toBe('[object UnionFind]');
+    expect(uf.toString()).toBe("[object UnionFind]");
     expect(uf.count).toBe(2);
     expect(uf.connected(4, 6)).toBe(false);
     expect(uf.find(0)).toBe(6);

@@ -1,6 +1,6 @@
 /**
  * A priority queue based on binary heap. It does not preserve the insertion order of equal keys.
- * 
+ *
  * This implementation provides O(log(n)) time for `add` and `deleteMin`; constant time for `min`
  * and `size`.
  */
@@ -73,11 +73,14 @@ export class PriorityQueue<K> {
   }
 
   get [Symbol.toStringTag]() {
-    return 'PriorityQueue';
+    return "PriorityQueue";
   }
 
   private less(i: number, j: number): boolean {
-    if (this.compareFn) return this.compareFn(this.pq[i] as K, this.pq[j] as K) < 0;
+    if (this.compareFn) {
+      return this.compareFn(this.pq[i] as K, this.pq[j] as K) < 0;
+    }
+
     return String(this.pq[i]) < String(this.pq[j]);
   }
 

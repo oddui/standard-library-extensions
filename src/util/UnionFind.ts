@@ -7,7 +7,7 @@ class UnionFind<T> {
   private _count = 0;
 
   get [Symbol.toStringTag]() {
-    return 'UnionFind';
+    return "UnionFind";
   }
 
   /**
@@ -19,9 +19,9 @@ class UnionFind<T> {
 
   /**
    * Check if p and q are in the same component.
-   * @param p 
-   * @param q 
-   * @returns 
+   * @param p
+   * @param q
+   * @returns
    */
   connected(p: T, q: T) {
     return this.find(p) === this.find(q);
@@ -35,11 +35,11 @@ class UnionFind<T> {
 
   /**
    * Find the component for p.
-   * @param p 
-   * @returns 
+   * @param p
+   * @returns
    */
   find(p: T): T {
-    if (!this.nodes.has(p)) throw new Error('Node does not exist.');
+    if (!this.nodes.has(p)) throw new Error("Node does not exist.");
 
     // @ts-expect-error
     const q: T = this.nodes.get(p);
@@ -52,9 +52,9 @@ class UnionFind<T> {
 
   /**
    * Add connection between p and q.
-   * @param p 
-   * @param q 
-   * @returns 
+   * @param p
+   * @param q
+   * @returns
    */
   union(p: T, q: T) {
     const componentP = this.find(p);
