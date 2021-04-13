@@ -1,4 +1,4 @@
-import TreeMap from './TreeMap';
+import TreeMap from "./TreeMap";
 
 /**
  * An ordered set implementation based on a {@link TreeMap}.
@@ -70,7 +70,10 @@ export class TreeSet<T> implements Set<T> {
    * @param {CallbackFn} callbackFn
    * @param thisArg the `this` value for each invocation of `callbackFn`
    */
-  forEach(callbackFn: (value: T, key: T, set: Set<T>) => void, thisArg?: any): void {
+  forEach(
+    callbackFn: (value: T, key: T, set: Set<T>) => void,
+    thisArg?: any
+  ): void {
     for (const k of this) {
       callbackFn.call(thisArg, k, k, this);
     }
@@ -111,7 +114,7 @@ export class TreeSet<T> implements Set<T> {
   }
 
   get [Symbol.toStringTag]() {
-    return 'TreeSet';
+    return "TreeSet";
   }
 }
 

@@ -11,8 +11,8 @@ jobs:
       - name: Set up .npmrc file to publish to npm
         uses: actions/setup-node@v1
         with:
-          node-version: '14.x'
-          registry-url: 'https://registry.npmjs.org'
+          node-version: "14.x"
+          registry-url: "https://registry.npmjs.org"
       - name: Check out code
         uses: actions/checkout@v2
       - name: Install dependencies

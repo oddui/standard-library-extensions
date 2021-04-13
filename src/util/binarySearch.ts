@@ -3,9 +3,9 @@
  * that equal to `target`, return the lowest or highest index based on the value of `left`.
  * When there is no element that equals `target`, return the index at which `target` can be inserted
  * to maintain sorted order (which is also the number of elements that are smaller than `target`).
- * @param array 
- * @param target 
- * @param compareFn 
+ * @param array
+ * @param target
+ * @param compareFn
  * @param left when there are multiple elements that equal target, return the lowest index if left
  * is true, return the highest index otherwise.
  */

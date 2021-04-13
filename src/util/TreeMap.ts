@@ -1,6 +1,10 @@
 class Node<K, V> {
-  public static get BLACK(): boolean { return false; }
-  public static get RED(): boolean { return true; }
+  public static get BLACK(): boolean {
+    return false;
+  }
+  public static get RED(): boolean {
+    return true;
+  }
 
   public key: K;
   public value: V;
@@ -23,7 +27,7 @@ class Node<K, V> {
 
 /**
  * An ordered symbol table implemented using a left-leaning red-black BST.
- * 
+ *
  * This implementation provides O(log(n)) time cost for `has`, `get`, `set`, `delete`, `deleteMin`,
  * `deleteMax` methods and order based queries(floor, ceil, select and rank). Algorithms are based
  * on those in Robert Sedgewick and Kevin Wayne’s Algorithms 4th edition.
@@ -131,7 +135,7 @@ export class TreeMap<K, V> implements Map<K, V> {
   }
 
   /**
-   * Deletes all key-value pairs from this map. 
+   * Deletes all key-value pairs from this map.
    */
   clear(): void {
     delete this.root;
@@ -188,7 +192,10 @@ export class TreeMap<K, V> implements Map<K, V> {
    * @param {CallbackFn} callbackFn
    * @param thisArg the `this` value for each invocation of `callbackFn`
    */
-  forEach(callbackFn: (value: V, key: K, map: TreeMap<K, V>) => void, thisArg?: any): void {
+  forEach(
+    callbackFn: (value: V, key: K, map: TreeMap<K, V>) => void,
+    thisArg?: any
+  ): void {
     for (const [k, v] of this) {
       callbackFn.call(thisArg, v, k, this);
     }
@@ -239,7 +246,7 @@ export class TreeMap<K, V> implements Map<K, V> {
   }
 
   get [Symbol.toStringTag]() {
-    return 'TreeMap';
+    return "TreeMap";
   }
 
   private compare(a: K, b: K): number {
@@ -465,7 +472,10 @@ export class TreeMap<K, V> implements Map<K, V> {
     return t ? t : x;
   }
 
-  private _select(x: Node<K, V> | undefined, rank: number): Node<K, V> | undefined {
+  private _select(
+    x: Node<K, V> | undefined,
+    rank: number
+  ): Node<K, V> | undefined {
     if (!x) return;
 
     const t = this._size(x.left);
@@ -495,7 +505,7 @@ export class TreeMap<K, V> implements Map<K, V> {
 
   /**
    * Are the node's size fields correct?
-   * 
+   *
    * This method is used for testing purposes.
    */
   /* istanbul ignore next */
@@ -512,7 +522,7 @@ export class TreeMap<K, V> implements Map<K, V> {
 
   /**
    * Do `rank` and `select` give consistent result?
-   * 
+   *
    * This method is used for testing purposes.
    */
   /* istanbul ignore next */
@@ -530,7 +540,7 @@ export class TreeMap<K, V> implements Map<K, V> {
 
   /**
    * Is this tree a binary search tree?
-   * 
+   *
    * This method is used for testing purposes.
    */
   /* istanbul ignore next */
@@ -553,7 +563,7 @@ export class TreeMap<K, V> implements Map<K, V> {
 
   /**
    * Are all red links lean left and at most one red link in a row on any path?
-   * 
+   *
    * This method is used for testing purposes.
    */
   /* istanbul ignore next */
@@ -571,7 +581,7 @@ export class TreeMap<K, V> implements Map<K, V> {
 
   /**
    * Do all paths from the root to a leaf have the same number of black links?
-   * 
+   *
    * This method is used for testing purposes.
    */
   /* istanbul ignore next */
