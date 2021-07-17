@@ -6,19 +6,15 @@ class Node<K, V> {
     return true;
   }
 
-  public key: K;
-  public value: V;
-  public size: number; // number of entries in this subtree
-  public color: boolean; // color of link from parent to this node
   public left?: Node<K, V>;
   public right?: Node<K, V>;
 
-  constructor(key: K, value: V, size: number, color: boolean) {
-    this.key = key;
-    this.value = value;
-    this.size = size;
-    this.color = color;
-  }
+  constructor(
+    public key: K,
+    public value: V,
+    public size: number, // number of entries in this subtree
+    public color: boolean // color of link from parent to this node
+  ) {}
 
   get entry(): [K, V] {
     return [this.key, this.value];
