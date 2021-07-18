@@ -10,7 +10,7 @@ Useful algorithms and data structures.
 
 - Align with conventions and interfaces of JavaScript standard built-in objects. e.g. `TreeMap` extends the built-in `Map` interface.
 - Concise code. Some methods use recursion for more compact code. e.g. most methods in `TreeMap` and the `find` method in `UnionFind`. These methods' time complexity is no worse than O(n) so it's not likely to reach the call stack limit.
-- No external depencendies
+- No external dependencies
 
 ## ui
 
