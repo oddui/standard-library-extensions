@@ -17,9 +17,10 @@ describe("TrieMap", () => {
       .set("the", 5)
       .set("sea", 6)
       .set("shore", 7)
-      .set("shell", 8);
+      .set("shell", 8)
+      .set("", 9);
 
-    expect(map.size).toBe(8);
+    expect(map.size).toBe(9);
     expect(map.get("sell")).toBeUndefined();
     expect(map.get("sells")).toBe(1);
     expect(map.get("selling")).toBeUndefined();
@@ -31,6 +32,7 @@ describe("TrieMap", () => {
     ]);
 
     const entries = [
+      ["", 9],
       ["the", 5],
       ["by", 4],
       ["sea", 6],
@@ -50,6 +52,8 @@ describe("TrieMap", () => {
     expect([...map.keys()]).toStrictEqual(entries.map(([k, _]) => k));
     expect([...map.values()]).toStrictEqual(entries.map(([_, v]) => v));
 
+    expect(map.delete("shell")).toBe(true);
+    expect(map.size).toBe(8);
     map.clear();
     expect(map.size).toBe(0);
   });
