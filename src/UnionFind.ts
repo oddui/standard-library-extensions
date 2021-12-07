@@ -1,7 +1,7 @@
 /**
  * Weighted quick union with path compression.
  */
-class UnionFind<T> {
+export class UnionFind<T> {
   nodes = new Map<T, T>();
   sizes = new Map<T, number>();
   private _count = 0;
