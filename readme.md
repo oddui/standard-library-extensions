@@ -16,7 +16,6 @@ Copy and paste code. Or use a package manager:
 
 ```js
 import { binarySearch } from "standard-library-extensions";
-import binarySearch from "standard-library-extensions/dist/util/binarySearch";
 ```
 
 ## Release
